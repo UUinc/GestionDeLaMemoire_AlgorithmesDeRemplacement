@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <conio.h>
+#include "queue.h"
 #include "console.h"
 #include "table.h"
 #include "remplacement_algorithmes.h"
