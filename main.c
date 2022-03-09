@@ -9,10 +9,11 @@
 
 //Functions prototype
 char** ReserveData(int,int,char**);
-void InsertData(int,int,char**,char*);
+void InsertData(int,int,char**,char*,int);
 void WipeScr_Title(void);
 bool IsNumber(char);
 void FormatSuiteReferences(char*);
+void DisplaySuiteReferences(char*,position);
 
 int main()
 {
@@ -21,10 +22,6 @@ int main()
     position pos;
 
     char **data;
-
-    //Position where to draw the table
-    pos.x = 5;
-    pos.y = 5;
 
     //Maximise Window
     MaximizeOutputWindow();
@@ -45,10 +42,19 @@ int main()
     //Insert Data depending on the algorithm used
 
     //1. Algorithme de remplacement optimal (Algorithme de Belday)
-    InsertData(lines, colonnes, data, W);
+    //2. Algorithme de remplacement FIFO
+    //3. Algorithme de remplacement LRU (Least Recently Used)
+    InsertData(lines, colonnes, data, W, 1);
 
     //Wipe screen and write the title
     WipeScr_Title();
+
+    //Position where to draw the table
+    pos.x = 5;
+    pos.y = 7;
+    
+    //Display Suite de references W
+    DisplaySuiteReferences(W, pos);
 
     //Draw Table
     Table(lines, colonnes, pos);
@@ -70,7 +76,7 @@ char** ReserveData(int lines, int colonnes, char **data)
 
     return data;
 }
-void InsertData(int lines, int colonnes, char **data, char *W)
+void InsertData(int lines, int colonnes, char **data, char *W, int algo)
 {
     int i, j, k;
 	bool newResource = false;
@@ -112,8 +118,19 @@ void InsertData(int lines, int colonnes, char **data, char *W)
         
 		if(newResource)
         {
-			//algorithme optimal (belady)
-            AlgorithmeOptimal(lines, colonnes, data, W, i, j);
+            switch (algo)
+            {
+                case 1:
+                    //algorithme optimal (belady)
+                    AlgorithmeOptimal(lines, colonnes, data, W, i, j);
+                    break;
+                case 2:
+                    //algorithme FIFO
+                    break;
+                case 3:
+                    //algorithme LRU (Least Recently Used)
+                    break;
+            }
         }
     }
 }
@@ -163,4 +180,24 @@ bool IsNumber(char c)
         default:
             return false;
     }
+}
+
+void DisplaySuiteReferences(char *W, position pos)
+{
+    int i, len = strlen(W);
+
+    //move cursor up 2 lines from Table;
+    pos.y -= 2;
+
+    gotoxy(pos.x, pos.y);
+
+    printf("{ ");
+    for(i = 0; i < len; i++)
+    {
+        printf("%c", W[i]);
+
+        if(i<len-1)
+            printf(", ");
+    }
+    printf(" }\n");
 }

@@ -134,20 +134,6 @@ void SpecialRect(int height, int width, int shape)
             gotoxy(initialPos.x + width + 1, initialPos.y + height + 1);
             printf("\xC5");
             break;
-        case 5:
-            /*
-                ┼┼
-                ┼┼
-             */
-            gotoxy(initialPos.x, initialPos.y);
-            printf("\xC5");
-            gotoxy(initialPos.x + width + 1, initialPos.y);
-            printf("\xC5");
-            gotoxy(initialPos.x, initialPos.y + height + 1);
-            printf("\xC5");
-            gotoxy(initialPos.x + width + 1, initialPos.y + height + 1);
-            printf("\xC5");
-            break;
     }
 
     //Position the cursor to the Right Top corner
