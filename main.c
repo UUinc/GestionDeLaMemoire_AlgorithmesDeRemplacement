@@ -38,24 +38,37 @@ int main()
     //allocate memory for the 2D array
     data = ReserveData(lines, colonnes, data);
 
-    //ALGORITHMES DE REMPLACEMENT
-    //Insert Data depending on the algorithm used
-
-    //1. Algorithme de remplacement optimal (Algorithme de Belday)
-    //2. Algorithme de remplacement FIFO
-    //3. Algorithme de remplacement LRU (Least Recently Used)
-    InsertData(lines, colonnes, data, W, 1);
-
     //Wipe screen and write the title
     WipeScr_Title();
 
-    //Position where to draw the table
+    //ALGORITHMES DE REMPLACEMENT
+    //Insert Data depending on the algorithm used
     pos.x = 5;
-    pos.y = 7;
-    
+    pos.y = 5;  
     //Display Suite de references W
     DisplaySuiteReferences(W, pos);
 
+    //1. Algorithme de remplacement optimal (Algorithme de Belday)
+    InsertData(lines, colonnes, data, W, 1);
+    //Position where to draw the table
+    pos.x = 5;
+    pos.y = wherey()+2;  
+    //Display the algorithme name
+    gotoxy(pos.x, pos.y - 1);
+    puts("Algorithme de remplacement optimal (Algorithme de Belday)");
+    //Draw Table
+    Table(lines, colonnes, pos);
+    //Display Data
+    DisplayData(lines, colonnes, pos, data);
+
+    //2. Algorithme de remplacement FIFO
+    InsertData(lines, colonnes, data, W, 2);
+    //Position where to draw the table
+    pos.x = 5;
+    pos.y = wherey()+4;  
+    //Display the algorithme name
+    gotoxy(pos.x, pos.y - 1);
+    puts("Algorithme de remplacement FIFO");
     //Draw Table
     Table(lines, colonnes, pos);
     //Display Data
@@ -76,6 +89,9 @@ char** ReserveData(int lines, int colonnes, char **data)
 
     return data;
 }
+//1. Algorithme de remplacement optimal (Algorithme de Belday)
+//2. Algorithme de remplacement FIFO
+//3. Algorithme de remplacement LRU (Least Recently Used)
 void InsertData(int lines, int colonnes, char **data, char *W, int algo)
 {
     int i, j, k;
@@ -126,6 +142,7 @@ void InsertData(int lines, int colonnes, char **data, char *W, int algo)
                     break;
                 case 2:
                     //algorithme FIFO
+                    AlgorithmeFIFO(lines, colonnes, data, W, i, j);
                     break;
                 case 3:
                     //algorithme LRU (Least Recently Used)
@@ -186,12 +203,9 @@ void DisplaySuiteReferences(char *W, position pos)
 {
     int i, len = strlen(W);
 
-    //move cursor up 2 lines from Table;
-    pos.y -= 2;
-
     gotoxy(pos.x, pos.y);
 
-    printf("{ ");
+    printf("w = { ");
     for(i = 0; i < len; i++)
     {
         printf("%c", W[i]);
