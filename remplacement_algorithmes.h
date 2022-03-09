@@ -1,6 +1,11 @@
 #ifndef REPLACEMENT_ALGORITHMES_H
 #define REPLACEMENT_ALGORITHMES_H
 
+#include "queue.h"
+
+//Global variables
+node* queue = NULL;
+
 //Functions Prototype
 // - algorithmes
 void AlgorithmeOptimal(int,int,char**,char*,int,int);
@@ -45,33 +50,31 @@ void AlgorithmeOptimal(int lines, int colonnes, char **data, char *W, int i, int
 }
 void AlgorithmeFIFO(int lines, int colonnes, char **data, char *W, int i, int j)
 {
-	int k;
-	int mCase;
-	int *freeCase = (int*)malloc(lines*sizeof(int));
+	int k, value;
 
-	//algorithme optimal (belady)
-	mCase = 0;
-	IntializeArrayBy(freeCase, lines, -1);
-
-	for(i=j+1; i<colonnes && mCase<lines-1; i++)
-	{	
+	//Check if the first new resource
+	if(j == lines)
+	{
+		//by default first resources are stored in order depending on W
 		for(k=0; k<lines; k++)
-		{   
-			if(W[i] == *(*(data+k)+j-1))
-			{							
-				*(freeCase + k)	= k;
-				mCase = CountFullCase(freeCase, lines);
-				break;
-			}  
+		{
+			queue = Enqueue(queue, W[k]);
 		}
 	}
-	
+	//algorithme FIFO
+	value = Dequeue(&queue);
+	queue = Enqueue(queue, W[j]);
+
 	//copy all resources in the new cases
 	for(k=0; k<lines; k++)
 	{   
 		*(*(data+k)+j) = *(*(data+k)+j-1);
+
+		if(*(*(data+k)+j-1) == value)
+		{
+			i = k;
+		}
 	}
-	i = GetFreeCase(freeCase, lines);
 	*(*(data+i)+j) = W[j];
 }
 
@@ -115,5 +118,4 @@ int CountFullCase(int *arr, int len)
 	
 	return c;
 }
-
 #endif

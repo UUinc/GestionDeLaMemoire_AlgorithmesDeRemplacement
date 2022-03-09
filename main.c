@@ -3,7 +3,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <conio.h>
-#include "queue.h"
 #include "console.h"
 #include "table.h"
 #include "remplacement_algorithmes.h"
@@ -97,9 +96,6 @@ void InsertData(int lines, int colonnes, char **data, char *W, int algo)
 {
     int i, j, k;
 	bool newResource = false;
-	int mCase;
-	
-	int *freeCase = (int*)malloc(lines*sizeof(int));
 	
     //Default Values in any type of Algorithmes de remplacement
     for(j = 0; j < colonnes && j < lines; j++)
