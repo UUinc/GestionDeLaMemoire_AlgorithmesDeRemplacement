@@ -12,6 +12,7 @@ typedef struct node
 node* CreateNode(char);
 node* Enqueue(node*,char);
 char Dequeue(node**);
+void PrintQueue(node*);
 
 node* CreateNode(char value)
 {

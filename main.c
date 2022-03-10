@@ -74,6 +74,19 @@ int main()
     //Display Data
     DisplayData(lines, colonnes, pos, data);
 
+    //3. Algorithme de remplacement LRU (Least Recently Used)
+    InsertData(lines, colonnes, data, W, 3);
+    //Position where to draw the table
+    pos.x = 5;
+    pos.y = wherey()+4;
+    //Display the algorithme name
+    gotoxy(pos.x, pos.y - 1);
+    puts("Algorithme de remplacement LRU");
+    //Draw Table
+    Table(lines, colonnes, pos);
+    //Display Data
+    DisplayData(lines, colonnes, pos, data);
+
     getch();
     return 0;
 }
@@ -143,7 +156,16 @@ void InsertData(int lines, int colonnes, char **data, char *W, int algo)
                     break;
                 case 3:
                     //algorithme LRU (Least Recently Used)
+                    AlgorithmeLRU(lines, colonnes, data, W, i, j);
                     break;
+            }
+        }
+        else //the resource exists in RAM
+        {
+            //algorithm LRU
+            if(algo == 3)
+            {
+                RearrangeQueue(W[j]);
             }
         }
     }

@@ -10,10 +10,12 @@ node* queue = NULL;
 // - algorithmes
 void AlgorithmeOptimal(int,int,char**,char*,int,int);
 void AlgorithmeFIFO(int,int,char**,char*,int,int);
+void AlgorithmeLRU(int,int,char**,char*,int,int);
 // - tools
 void IntializeArrayBy(int*,int,int);
 int GetFreeCase(int*, int);
 int CountFullCase(int*, int);
+void RearrangeQueue(char);
 
 //Functions Definition
 //Algorithmes
@@ -55,6 +57,9 @@ void AlgorithmeFIFO(int lines, int colonnes, char **data, char *W, int i, int j)
 	//Check if the first new resource
 	if(j == lines)
 	{
+		//Free up the list
+		queue = NULL;
+
 		//by default first resources are stored in order depending on W
 		for(k=0; k<lines; k++)
 		{
@@ -77,7 +82,37 @@ void AlgorithmeFIFO(int lines, int colonnes, char **data, char *W, int i, int j)
 	}
 	*(*(data+i)+j) = W[j];
 }
+void AlgorithmeLRU(int lines, int colonnes, char **data, char *W, int i, int j)
+{
+	int k, value;
 
+	//Check if the first new resource
+	if(j == lines)
+	{
+		//Free up the list
+		queue = NULL;
+
+		//by default first resources are stored in order depending on W
+		for(k=0; k<lines; k++)
+		{
+			queue = Enqueue(queue, W[k]);
+		}
+	}
+	//algorithme LRU
+	value = Dequeue(&queue);
+	queue = Enqueue(queue, W[j]);
+	//copy all resources in the new cases
+	for(k=0; k<lines; k++)
+	{   
+		*(*(data+k)+j) = *(*(data+k)+j-1);
+
+		if(*(*(data+k)+j-1) == value)
+		{
+			i = k;
+		}
+	}
+	*(*(data+i)+j) = W[j]; 
+}
 //tools
 void IntializeArrayBy(int *arr, int len, int data)
 {
@@ -118,4 +153,56 @@ int CountFullCase(int *arr, int len)
 	
 	return c;
 }
+void RearrangeQueue(char value)
+{
+	node *head = NULL;
+	node *target = NULL;
+	node *tail = NULL;
+
+	head = queue;
+
+	if(head == NULL)
+	{
+		puts("Queue Empty!");
+		return;
+	}
+
+	while(head != NULL)
+	{
+		if(head->data == value)
+		{
+			//set the node before the target node
+			target = head;
+		}
+		tail = head;
+		head = head->next;
+	}
+
+	if(target == NULL)
+	{
+		puts("target not found!");
+		return;
+	}
+
+	head = queue;
+
+	if(head == target)
+	{
+		queue = target->next;
+	}
+	else
+	{
+		while(head != NULL)
+		{
+			if(head->next == target)
+			{
+				head->next = target->next;
+				break;
+			}
+		}
+	}
+	target->next = NULL;
+	tail->next = target;
+}
+
 #endif
