@@ -9,11 +9,14 @@
 
 //Functions prototype
 char** ReserveData(int,int,char**);
+void FreeData(int,char**);
 void InsertData(int,int,char**,char*,int);
 void WipeScr_Title(void);
 bool IsNumber(char);
 void FormatSuiteReferences(char*);
 void DisplaySuiteReferences(char*,position);
+bool ResourceExist(char**,int,char);
+void SetData(int,int,char**,char);
 
 int main()
 {
@@ -102,6 +105,28 @@ char** ReserveData(int lines, int colonnes, char **data)
 
     return data;
 }
+void FreeData(int lines, char **data)
+{
+    int i;
+
+    for(i=0; i<lines; i++)
+    {
+        free(*(data+i));
+    }
+    free(data);
+}
+void SetData(int lines, int colonnes, char **data, char value)
+{
+    int i,j;
+
+    for(i=0; i<lines; i++)
+    {
+        for(j=0; j<colonnes; j++)
+        {
+            *(*(data+i)+j) = value;
+        }
+    }
+}
 //1. Algorithme de remplacement optimal (Algorithme de Belday)
 //2. Algorithme de remplacement FIFO
 //3. Algorithme de remplacement LRU (Least Recently Used)
@@ -109,13 +134,23 @@ void InsertData(int lines, int colonnes, char **data, char *W, int algo)
 {
     int i, j, k;
 	bool newResource = false;
+
+    //Set Initial values for data
+    SetData(lines, colonnes, data, ' ');
 	
     //Default Values in any type of Algorithmes de remplacement
     for(j = 0; j < colonnes && j < lines; j++)
     {
-        for(i=0; i<=j && i<colonnes; i++)
+        for(i=0, k=0; i<=j && i<colonnes; k++)
         {
-            *(*(data+i)+j) = W[i];
+            if(ResourceExist(data, j, W[k]))
+            {
+                k++;
+            }
+            else
+            {
+                *(*(data+i)+j) = W[k]; i++;
+            }
         }
         for(; i<lines && i<colonnes; i++)
         {
@@ -197,7 +232,19 @@ void FormatSuiteReferences(char *W)
 
     W[len] = '\0';
 }
+bool ResourceExist(char **data, int colonneIndex, char resource)
+{
+    int i;
 
+    for(i=0; i<=colonneIndex; i++)
+    {
+        if(*(*(data + i) + colonneIndex) == resource)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 bool IsNumber(char c)
 {
     switch(c)
@@ -217,7 +264,6 @@ bool IsNumber(char c)
             return false;
     }
 }
-
 void DisplaySuiteReferences(char *W, position pos)
 {
     int i, len = strlen(W);

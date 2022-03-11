@@ -16,6 +16,7 @@ void IntializeArrayBy(int*,int,int);
 int GetFreeCase(int*, int);
 int CountFullCase(int*, int);
 void RearrangeQueue(char);
+bool ResourceExistInQueue(node*, char);
 
 //Functions Definition
 //Algorithmes
@@ -63,6 +64,10 @@ void AlgorithmeFIFO(int lines, int colonnes, char **data, char *W, int i, int j)
 		//by default first resources are stored in order depending on W
 		for(k=0; k<lines; k++)
 		{
+			if(ResourceExistInQueue(queue, W[k]))
+			{
+				continue;
+			}
 			queue = Enqueue(queue, W[k]);
 		}
 	}
@@ -95,6 +100,10 @@ void AlgorithmeLRU(int lines, int colonnes, char **data, char *W, int i, int j)
 		//by default first resources are stored in order depending on W
 		for(k=0; k<lines; k++)
 		{
+			if(ResourceExistInQueue(queue, W[k]))
+			{
+				continue;
+			}
 			queue = Enqueue(queue, W[k]);
 		}
 	}
@@ -205,4 +214,21 @@ void RearrangeQueue(char value)
 	tail->next = target;
 }
 
+//Check if the resource exist
+bool ResourceExistInQueue(node *_queue, char resource)
+{
+	node *head = _queue;
+
+	while(head != NULL)
+	{
+		if(head->data == resource)
+		{
+			return true;
+		}
+
+		head = head->next;
+	}
+
+	return false;
+}
 #endif
